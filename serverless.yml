@@ -1,26 +1,35 @@
-org: antoniocot
-service: api-web-scraping-new
+service: api-web-scraping-sismos
 
 provider:
   name: aws
-  runtime: python3.12
-  memorySize: 1024
-  timeout: 30
-  iam:
-    role: arn:aws:iam::316129865556:role/LabRole
+  runtime: python3.8
+  region: us-east-1
+  environment:
+    TABLE_NAME: TablaWebScrapping_New
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+        - "dynamodb:Scan"
+        - "dynamodb:BatchWriteItem"
+      Resource: "arn:aws:dynamodb:us-east-1:*:table/TablaWebScrapping_New"
 
 functions:
-  scrape_table:
-    handler: scrap_table_new.lambda_handler
-    package:
-      include:
-        - ./**  
+  scrapeTable:
+    handler: handler.lambda_handler
+    layers:
+      - arn:aws:lambda:us-east-1:YOUR_ACCOUNT_ID:layer:chrome-selenium-layer:1
     events:
       - http:
-          path: /scrape/table
+          path: scrape/table
           method: get
-          cors: true
-          integration: lambda
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
 
 resources:
   Resources:
