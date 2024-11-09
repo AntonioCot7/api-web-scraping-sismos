@@ -1,24 +1,22 @@
-service: api-web-scraping-sismos
+org: antoniocot
+service: api-web-scraping-new
 
 provider:
   name: aws
-  runtime: python3.8
+  runtime: python3.12
   region: us-east-1
+  memorySize: 1024
+  timeout: 30
+  iam:
+    role: arn:aws:iam::316129865556:role/LabRole
   environment:
     TABLE_NAME: TablaWebScrapping_New
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - "dynamodb:PutItem"
-        - "dynamodb:Scan"
-        - "dynamodb:BatchWriteItem"
-      Resource: "arn:aws:dynamodb:us-east-1:*:table/TablaWebScrapping_New"
 
 functions:
   scrapeTable:
     handler: handler.lambda_handler
     layers:
-      - arn:aws:lambda:us-east-1:YOUR_ACCOUNT_ID:layer:chrome-selenium-layer:1
+      - arn:aws:lambda:us-east-1:316129865556:layer:chrome-selenium-layer:1
     events:
       - http:
           path: scrape/table
