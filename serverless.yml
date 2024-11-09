@@ -9,21 +9,17 @@ provider:
   timeout: 30
   iam:
     role: arn:aws:iam::316129865556:role/LabRole
-  environment:
-    TABLE_NAME: TablaWebScrapping_New
+
+plugins:
+  - serverless-python-requirements
 
 functions:
-  scrapeTable:
-    handler: handler.lambda_handler
-    layers:
-      - arn:aws:lambda:us-east-1:316129865556:layer:chrome-selenium-layer:1
+  scrape_table:
+    handler: handler.scrape_table
     events:
       - http:
           path: scrape/table
           method: get
-
-plugins:
-  - serverless-python-requirements
 
 custom:
   pythonRequirements:
@@ -31,10 +27,10 @@ custom:
 
 resources:
   Resources:
-    TablaWebScrapping:
+    TableWebScrapping:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: TablaWebScrapping_New
+        TableName: TableWebScrapping_New
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
