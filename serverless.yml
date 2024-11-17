@@ -12,8 +12,8 @@ provider:
     API_KEY: ${env:API_KEY}
 
 functions:
-  scrape_table:
-    handler: scrap_table.lambda_handler
+  scrape_table_sismos:
+    handler: scrap_table_sismos.lambda_handler
     package:
       include:
         - ./**
